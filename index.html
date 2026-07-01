@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>دعوة زفاف 💕</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Amiri:wght@400;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --rose: #8b2030;
+      --rose-light: #a83040;
+      --gold: #b8960a;
+      --gold-light: #d4a843;
+      --cream: #e8e2d5;
+      --text: #3a2a20;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: 'Amiri', serif;
+      background: #e2dace;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* ========== BACKGROUND ========== */
+    .bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      background: radial-gradient(ellipse at 30% 40%, #ede7d8 0%, #e0d8c8 45%, #d5ccba 100%);
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0;
+      animation: driftOrb linear infinite;
+    }
+
+    @keyframes driftOrb {
+      0% {
+        opacity: 0;
+        transform: translate(0, 0) scale(1);
+      }
+
+      15% {
+        opacity: 0.9;
+      }
+
+      85% {
+        opacity: 0.6;
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(var(--tx), var(--ty)) scale(1.3);
+      }
+    }
+
+    .petal {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0;
+      animation: petalFall linear infinite;
+    }
+
+    @keyframes petalFall {
+      0% {
+        opacity: 0;
+        transform: translateY(-10px) rotate(0deg) translateX(0);
+      }
+
+      8% {
+        opacity: 0.7;
+      }
+
+      90% {
+        opacity: 0.4;
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(105vh) rotate(720deg) translateX(var(--sway));
+      }
+    }
+
+    /* ========== ENVELOPE SCREEN ========== */
+    #envelopeScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      cursor: pointer;
+    }
+
+    .guest-label {
+      text-align: center;
+      animation: fadeUp 1s ease forwards;
+      opacity: 0;
+    }
+
+    .guest-dear {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.8rem;
+      letter-spacing: 6px;
+      color: #8a7a62;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .guest-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.4rem;
+      font-style: italic;
+      font-weight: 300;
+      color: #5a4535;
+      line-height: 1;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Envelope wrapper */
+    .env-wrap {
+      position: relative;
+      width: 420px;
+      max-width: 88vw;
+      animation: fadeUp 1s 0.25s ease forwards;
+      opacity: 0;
+      transition: transform 0.5s ease;
+    }
+
+    .env-wrap:hover {
+      transform: scale(1.02) translateY(-5px);
+    }
+
+    .env-svg {
+      width: 100%;
+      filter:
+        drop-shadow(0 28px 55px rgba(70, 50, 20, 0.28)) drop-shadow(0 6px 16px rgba(70, 50, 20, 0.14));
+    }
+
+    /* Wax seal absolutely centered */
+    .wax-wrap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -44%);
+      width: 108px;
+      height: 108px;
+      animation: sealPulse 3.5s ease-in-out infinite;
+    }
+
+    @keyframes sealPulse {
+
+      0%,
+      100% {
+        filter: drop-shadow(0 8px 18px rgba(139, 32, 48, 0.55));
+        transform: translate(-50%, -44%) scale(1);
+      }
+
+      50% {
+        filter: drop-shadow(0 12px 26px rgba(139, 32, 48, 0.8));
+        transform: translate(-50%, -44%) scale(1.04);
+      }
+    }
+
+    .touch-hint {
+      position: absolute;
+      bottom: -42px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem;
+      letter-spacing: 5px;
+      color: #9a8870;
+      text-transform: uppercase;
+      white-space: nowrap;
+      animation: blink 2.5s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 0.5
+      }
+
+      50% {
+        opacity: 1
+      }
+    }
+
+    /* Opening animation */
+    .env-wrap.opening {
+      animation: envOpen 0.8s ease forwards !important;
+    }
+
+    @keyframes envOpen {
+      0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+
+      40% {
+        opacity: 1;
+        transform: scale(1.07) translateY(-18px);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(0.45) translateY(-130px);
+      }
+    }
+
+    /* ========== MAIN CONTENT ========== */
+    #mainContent {
+      display: none;
+      position: relative;
+      z-index: 1;
+      padding-bottom: 70px;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 24px 40px;
+    }
+
+    .ornament {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      letter-spacing: 10px;
+      color: var(--gold);
+      opacity: 0.75;
+      margin: 18px 0;
+    }
+
+    /* Photo */
+    .photo-ring {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      position: relative;
+      margin: 0 auto 30px;
+      animation: fadeInScale 1.2s ease forwards;
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.85);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .photo-ring::before {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      background: conic-gradient(var(--gold-light), var(--rose), var(--gold-light), var(--rose), var(--gold-light));
+      animation: spin 10s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .photo-ring img,
+    .photo-ph {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 5px solid white;
+      display: block;
+    }
+
+    .photo-ph {
+      background: linear-gradient(135deg, #ede0d0, #d4c4b0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+
+    .names-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin: 10px 0;
+    }
+
+    .name-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--rose);
+    }
+
+    .heart-big {
+      font-size: 2.5rem;
+      color: var(--rose);
+      animation: heartbeat 1.8s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      30% {
+        transform: scale(1.28);
+      }
+
+      50% {
+        transform: scale(1.12);
+      }
+    }
+
+    /* Section cards */
+    .section {
+      max-width: 500px;
+      margin: 0 auto 28px;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: rgba(255, 253, 248, 0.96);
+      border-radius: 20px;
+      padding: 30px 26px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(70, 50, 20, 0.1), 0 2px 8px rgba(70, 50, 20, 0.05);
+      border: 1px solid rgba(184, 150, 10, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold-light), var(--rose), var(--gold-light), transparent);
+    }
+
+    /* Verse */
+    .verse-icons {
+      font-size: 1.3rem;
+      letter-spacing: 8px;
+      margin-bottom: 16px;
+    }
+
+    .verse-text {
+      font-size: 1.15rem;
+      line-height: 2.2;
+      color: #4a3525;
+    }
+
+    .verse-ref {
+      color: var(--gold);
+      font-size: .9rem;
+      font-weight: 700;
+      margin-top: 14px;
+      letter-spacing: 1px;
+    }
+
+    /* Details */
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+
+    .detail-item {
+      background: linear-gradient(160deg, #faf7f0, #f5f0e5);
+      border-radius: 16px;
+      padding: 18px 8px;
+      border: 1px solid rgba(184, 150, 10, 0.1);
+      transition: transform .3s;
+    }
+
+    .detail-item:hover {
+      transform: translateY(-4px);
+    }
+
+    .detail-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .detail-label {
+      font-weight: 700;
+      font-size: .9rem;
+      color: var(--rose);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .detail-val {
+      font-size: .83rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Countdown */
+    .cd-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      color: #5a3a28;
+      margin-bottom: 22px;
+    }
+
+    .cd-title::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 1.5px;
+      background: linear-gradient(90deg, var(--rose), var(--gold-light));
+      margin: 10px auto 0;
+    }
+
+    .cd-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .cd-unit {
+      background: linear-gradient(160deg, #fff8f0, #fdf0e5);
+      border-radius: 14px;
+      padding: 16px 12px 12px;
+      min-width: 68px;
+      text-align: center;
+      border: 1px solid rgba(139, 32, 48, 0.1);
+      box-shadow: 0 4px 14px rgba(139, 32, 48, 0.06);
+    }
+
+    .cd-num {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: var(--rose);
+      line-height: 1;
+    }
+
+    .cd-lbl {
+      display: block;
+      font-size: .75rem;
+      color: #aaa;
+      margin-top: 6px;
+    }
+
+    .cd-sep {
+      font-size: 2rem;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 14px;
+      animation: blinkSep 1s ease-in-out infinite;
+    }
+
+    @keyframes blinkSep {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0.2
+      }
+    }
+
+    /* Footer */
+    .footer-card {
+      background: linear-gradient(135deg, var(--rose), #6b1825);
+      border-radius: 20px;
+      padding: 30px 24px;
+      text-align: center;
+      color: white;
+    }
+
+    .footer-hearts {
+      font-size: 1.5rem;
+      letter-spacing: 10px;
+      margin-bottom: 12px;
+      animation: heartbeat 2s ease-in-out infinite;
+    }
+
+    .footer-text {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- BG -->
+  <div class="bg-canvas" id="bgCanvas"></div>
+
+  <!-- ===== ENVELOPE SCREEN ===== -->
+  <div id="envelopeScreen">
+
+    <div class="guest-label">
+      <span class="guest-dear">Dear</span>
+      <span class="guest-name">Guest</span>
+    </div>
+
+    <div class="env-wrap" id="envWrap">
+
+      <!-- Envelope SVG -->
+      <svg class="env-svg" viewBox="0 0 440 295" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="gBody" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#eae2ce" />
+            <stop offset="100%" stop-color="#d6cab2" />
+          </linearGradient>
+          <linearGradient id="gFlapL" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#c8bca4" />
+            <stop offset="100%" stop-color="#ddd5be" />
+          </linearGradient>
+          <linearGradient id="gFlapR" x1="1" y1="0" x2="0" y2="0">
+            <stop offset="0%" stop-color="#c8bca4" />
+            <stop offset="100%" stop-color="#ddd5be" />
+          </linearGradient>
+          <linearGradient id="gFlapT" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#c2b69e" />
+            <stop offset="100%" stop-color="#ddd5bc" />
+          </linearGradient>
+          <linearGradient id="gFlapB" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0%" stop-color="#bdb09a" />
+            <stop offset="100%" stop-color="#d8cebc" />
+          </linearGradient>
+          <filter id="fShadow">
+            <feDropShadow dx="0" dy="14" stdDeviation="20" flood-color="rgba(70,50,20,0.28)" />
+          </filter>
+        </defs>
+
+        <g filter="url(#fShadow)">
+          <!-- Body -->
+          <rect x="8" y="55" width="424" height="232" rx="5" fill="url(#gBody)" />
+          <!-- Left flap -->
+          <polygon points="8,55 8,287 220,171" fill="url(#gFlapL)" />
+          <line x1="8" y1="55" x2="220" y2="171" stroke="#b0a48e" stroke-width="0.7" opacity="0.5" />
+          <!-- Right flap -->
+          <polygon points="432,55 432,287 220,171" fill="url(#gFlapR)" />
+          <line x1="432" y1="55" x2="220" y2="171" stroke="#b0a48e" stroke-width="0.7" opacity="0.5" />
+          <!-- Bottom flap -->
+          <polygon points="8,287 432,287 220,171" fill="url(#gFlapB)" />
+          <!-- Top flap -->
+          <polygon points="8,55 432,55 220,171" fill="url(#gFlapT)" />
+          <!-- Top edge crease -->
+          <line x1="8" y1="55" x2="432" y2="55" stroke="#a89a80" stroke-width="1" opacity="0.7" />
+        </g>
+      </svg>
+
+      <!-- Wax seal SVG -->
+      <svg class="wax-wrap" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="wGrad" cx="36%" cy="30%">
+            <stop offset="0%" stop-color="#c04060" />
+            <stop offset="38%" stop-color="#8b2030" />
+            <stop offset="72%" stop-color="#6b1428" />
+            <stop offset="100%" stop-color="#4a0d1c" />
+          </radialGradient>
+          <radialGradient id="wShine" cx="34%" cy="28%">
+            <stop offset="0%" stop-color="rgba(255,190,200,0.45)" />
+            <stop offset="100%" stop-color="rgba(255,170,180,0)" />
+          </radialGradient>
+          <filter id="wBlur">
+            <feGaussianBlur stdDeviation="2.5" />
+          </filter>
+        </defs>
+        <!-- Shadow -->
+        <ellipse cx="56" cy="100" rx="34" ry="5.5" fill="rgba(50,8,18,0.22)" filter="url(#wBlur)" />
+        <!-- Drips -->
+        <ellipse cx="28" cy="87" rx="11" ry="7" fill="#6b1428" opacity="0.8" />
+        <ellipse cx="82" cy="87" rx="11" ry="7" fill="#6b1428" opacity="0.8" />
+        <ellipse cx="55" cy="91" rx="13" ry="5.5" fill="#781830" opacity="0.9" />
+        <!-- Main circle -->
+        <circle cx="55" cy="52" r="42" fill="url(#wGrad)" />
+        <!-- Shine -->
+        <circle cx="55" cy="52" r="42" fill="url(#wShine)" />
+        <!-- Outer ring -->
+        <circle cx="55" cy="52" r="37" fill="none" stroke="rgba(180,80,100,0.28)" stroke-width="1.5" />
+        <circle cx="55" cy="52" r="30" fill="none" stroke="rgba(180,80,100,0.18)" stroke-width="0.8" />
+        <!-- Embossed heart -->
+        <path d="M55,42 C52,36 42,36 42,46 C42,52 49,59 55,66 C61,59 68,52 68,46 C68,36 58,36 55,42 Z" fill="none"
+          stroke="rgba(200,100,120,0.45)" stroke-width="1.8" />
+      </svg>
+
+      <div class="touch-hint">Touch to open</div>
+    </div>
+  </div>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <div id="mainContent">
+
+    <div class="hero">
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <div class="photo-ring">
+        <img src="./images/image.png" alt="image"
+          onerror="this.parentElement.innerHTML='<div class=\'photo-ph\'>💕</div>'">
+      </div>
+
+      <div class="names-row">
+        <span class="name-text">يونس</span>
+        <span class="heart-big">♥</span>
+        <span class="name-text">ليلي</span>
+      </div>
+
+      <div class="ornament">✦ ✦ ✦</div>
+    </div>
+
+    <div class="section">
+      <div class="card">
+        <div class="verse-icons">🧡 🧡 🧡</div>
+        <p class="verse-text">
+          "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا<br>
+          وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً"
+        </p>
+        <p class="verse-ref">سورة الروم - آية 21</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="card">
+        <div class="details-grid">
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="6" width="36" height="32" rx="5" fill="#fff" stroke="#8b2030" stroke-width="2" />
+                <rect x="2" y="6" width="36" height="11" rx="5" fill="#8b2030" />
+                <rect x="2" y="13" width="36" height="4" fill="#8b2030" />
+                <line x1="12" y1="2" x2="12" y2="11" stroke="#8b2030" stroke-width="2.5" stroke-linecap="round" />
+                <line x1="28" y1="2" x2="28" y2="11" stroke="#8b2030" stroke-width="2.5" stroke-linecap="round" />
+                <text x="20" y="32" text-anchor="middle" font-size="13" font-weight="bold" fill="#8b2030"
+                  font-family="Arial">26</text>
+              </svg>
+            </div>
+            <span class="detail-label">التاريخ</span>
+            <span class="detail-val">يوم السبت<br>26 ديسمبر 2026</span>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">⏰</div>
+            <span class="detail-label">الموعد</span>
+            <span class="detail-val">الساعة 8:00 مساءً</span>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">📍</div>
+            <span class="detail-label">المكان</span>
+            <span class="detail-val">قريباً...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="card">
+        <h2 class="cd-title">الوقت المتبقي للفرح</h2>
+        <div class="cd-row">
+          <div class="cd-unit"><span class="cd-num" id="days">00</span><span class="cd-lbl">يوم</span></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit"><span class="cd-num" id="hours">00</span><span class="cd-lbl">ساعة</span></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit"><span class="cd-num" id="minutes">00</span><span class="cd-lbl">دقيقة</span></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit"><span class="cd-num" id="seconds">00</span><span class="cd-lbl">ثانية</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="footer-card">
+        <div class="footer-hearts">♥ ♥ ♥</div>
+        <p class="footer-text">نسعد بمشاركتكم فرحتنا 💕</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ===== BACKGROUND =====
+    const bgCanvas = document.getElementById('bgCanvas');
+
+    // Orbs
+    const orbCols = [
+      'rgba(210,190,145,0.55)', 'rgba(185,155,105,0.4)',
+      'rgba(225,205,165,0.45)', 'rgba(165,130,85,0.35)',
+      'rgba(200,175,130,0.4)', 'rgba(230,215,180,0.5)',
+    ];
+    for (let i = 0; i < 6; i++) {
+      const o = document.createElement('div');
+      o.className = 'orb';
+      const sz = Math.random() * 280 + 160;
+      const tx = (Math.random() - 0.5) * 380;
+      const ty = (Math.random() - 0.5) * 280;
+      o.style.cssText = `
+    width:${sz}px; height:${sz}px;
+    background:${orbCols[i % orbCols.length]};
+    left:${Math.random() * 100}%; top:${Math.random() * 100}%;
+    --tx:${tx}px; --ty:${ty}px;
+    animation-duration:${Math.random() * 18 + 16}s;
+    animation-delay:-${Math.random() * 20}s;
+  `;
+      bgCanvas.appendChild(o);
+    }
+
+    // Petals
+    const syms = ['🌸', '🌹', '🩷', '❤️', '✨', '💫', '🌺'];
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      const sway = (Math.random() - 0.5) * 150;
+      p.textContent = syms[Math.floor(Math.random() * syms.length)];
+      p.style.cssText = `
+    left:${Math.random() * 100}%;
+    font-size:${Math.random() * 0.8 + 0.7}rem;
+    animation-duration:${Math.random() * 12 + 13}s;
+    animation-delay:-${Math.random() * 20}s;
+    --sway:${sway}px;
+  `;
+      bgCanvas.appendChild(p);
+    }
+
+    // ===== OPEN =====
+    document.getElementById('envelopeScreen').addEventListener('click', () => {
+      const wrap = document.getElementById('envWrap');
+      wrap.classList.add('opening');
+      setTimeout(() => {
+        document.getElementById('envelopeScreen').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+      }, 750);
+    });
+
+    // ===== COUNTDOWN =====
+    const wDate = new Date("2026-12-26:00:00").getTime();
+    function tick() {
+      const d = wDate - Date.now();
+      if (d <= 0) return;
+      document.getElementById('days').textContent = String(Math.floor(d / 86400000)).padStart(2, '0');
+      document.getElementById('hours').textContent = String(Math.floor((d % 86400000) / 3600000)).padStart(2, '0');
+      document.getElementById('minutes').textContent = String(Math.floor((d % 3600000) / 60000)).padStart(2, '0');
+      document.getElementById('seconds').textContent = String(Math.floor((d % 60000) / 1000)).padStart(2, '0');
+    }
+    setInterval(tick, 1000);
+    tick();
+  </script>
+</body>
+
+</html>
